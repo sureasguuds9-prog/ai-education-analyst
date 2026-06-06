@@ -1,4 +1,4 @@
-# 🎓 AI in Education: Helper or Harm?
+#  AI in Education: Helper or Harm?
 
 > **Exploratory data analysis of how GenAI tools affect student performance, burnout, and skill retention**
 
