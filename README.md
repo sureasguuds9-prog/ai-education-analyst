@@ -1,138 +1,100 @@
-#  AI in Education: Helper or Harm?
+# ИИ в образовании: помощь или риск?
 
-> **Exploratory data analysis of how GenAI tools affect student performance, burnout, and skill retention**
+> Разведочный анализ связи использования генеративного ИИ с успеваемостью, сохранением навыков и риском выгорания студентов.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![pandas](https://img.shields.io/badge/pandas-2.x-150458?logo=pandas&logoColor=white)
 ![scipy](https://img.shields.io/badge/scipy-stats-8CAAE6?logo=scipy&logoColor=white)
-![Dataset](https://img.shields.io/badge/Dataset-50%2C000_students-green)
-![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
+![Данные](https://img.shields.io/badge/%D0%94%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-50%20000_%D1%81%D1%82%D1%83%D0%B4%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-green)
+![Статус](https://img.shields.io/badge/%D0%A1%D1%82%D0%B0%D1%82%D1%83%D1%81-%D0%B7%D0%B0%D0%B2%D0%B5%D1%80%D1%88%D1%91%D0%BD-brightgreen)
 
----
+## Кратко
 
-## About This Project
+Проект исследует, как объём и сценарий использования ИИ связаны с изменением GPA, сохранением знаний, тревожностью и выгоранием. В анализе используются групповые сравнения, корреляции и пять статистических тестов.
 
-This is a **pet project** built to sharpen EDA and statistical analysis skills on a topic that feels genuinely important right now — how generative AI is reshaping student learning.
+Главный наблюдаемый результат: в этой выборке максимальный средний прирост GPA приходится на **5–10 часов ИИ в неделю** (`+0,23`), а среди студентов с нагрузкой **свыше 20 часов** доля высокого риска выгорания достигает **74,3%**. Это связь в данных, а не доказанный причинный эффект.
 
-With tools like ChatGPT, Copilot, and Claude becoming part of everyday study routines, a simple question arises: **does using AI actually help students, or does it create hidden costs** — dependency, burnout, and eroded skills?
+## Исследовательские вопросы
 
-The analysis covers:
-- How usage volume (hours/week) correlates with GPA change and burnout risk
-- Whether institutional AI policy (ban vs encourage) affects outcomes
-- Which use case — debugging, summarizing, or just getting direct answers — leads to the best results
-- Whether prompt engineering skill is a meaningful differentiator
-- 5 statistical tests (t-test, ANOVA, Spearman correlation)
+- Как часы работы с ИИ связаны с изменением GPA и риском выгорания?
+- Отличаются ли результаты при разных правилах использования ИИ в вузе?
+- Какие сценарии — отладки, генерация идей, конспектирование или получение готовых ответов — связаны с лучшими результатами?
+- Связан ли навык составления запросов с сохранением знаний?
 
-**Key finding:** there's an optimal zone of 5–10 hours/week where GPA gains are highest. Beyond 20 hours/week, 74% of students fall into high burnout risk — and GPA growth drops off.
+## Данные
 
----
+| Параметр | Значение |
+|---|---|
+| Источник | [Kaggle — Impact of AI on Students](https://www.kaggle.com/datasets/laveshjadon/ai-impact-on-students) |
+| Автор набора | laveshjadon |
+| Наблюдения | 50 000 студентов |
+| Признаки | 16 столбцов |
+| Пропуски | 0 |
+| Файл | `ai_student_impact_dataset.csv` |
 
-## Dataset
+Ключевые признаки: GPA до и после семестра, часы ИИ и традиционной учёбы, основной сценарий использования, навык составления запросов, политика вуза, тревожность, сохранение навыков и риск выгорания.
 
-| Property | Value |
-|----------|-------|
-| **Source** | [Kaggle — Impact of AI on Students](https://www.kaggle.com/datasets/laveshjadon/ai-impact-on-students) |
-| **Author** | laveshjadon |
-| **Rows** | 50,000 students |
-| **Features** | 16 columns |
-| **Missing values** | 0 |
-| **File** | `ai_student_impact_dataset.csv` |
+## Основные результаты
 
-### Feature Overview
+### Объём использования ИИ
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `Major_Category` | categorical | Field of study: STEM, Business, Humanities, Medical, Arts |
-| `Year_of_Study` | categorical | Academic year: Freshman → Graduate |
-| `Pre_Semester_GPA` | float | GPA before the semester (1.0–4.0) |
-| `Post_Semester_GPA` | float | GPA after the semester (1.0–4.0) |
-| `Weekly_GenAI_Hours` | float | Hours per week using AI tools |
-| `Primary_Use_Case` | categorical | Main use: Debugging, Ideation, Copywriting, Summarizing, Direct Answers |
-| `Prompt_Engineering_Skill` | categorical | Skill level: Beginner / Intermediate / Advanced |
-| `Tool_Diversity` | int | Number of different AI tools used |
-| `Paid_Subscription` | bool | Paid AI plan or not |
-| `Traditional_Study_Hours` | float | Hours/week of non-AI study |
-| `Perceived_AI_Dependency` | 1–10 | Self-reported dependency on AI |
-| `Institutional_Policy` | categorical | University stance: Strict_Ban / Allowed_With_Citation / Actively_Encouraged |
-| `Anxiety_Level_During_Exams` | 1–10 | Exam anxiety score |
-| `Skill_Retention_Score` | 0–100 | Retained knowledge score |
-| `Burnout_Risk_Level` | categorical | Burnout risk: Low / Medium / High |
+| Часов в неделю | Среднее изменение GPA | Высокий риск выгорания |
+|---:|---:|---:|
+| 0–2 | +0,19 | 8,9% |
+| 2–5 | +0,20 | 11,9% |
+| **5–10** | **+0,23** | **19,0%** |
+| 10–20 | +0,22 | 40,0% |
+| 20+ | +0,16 | **74,3%** |
 
-The dataset was designed to help researchers, educators, and policymakers explore the **benefits and risks of AI adoption in higher education**.
+### Сценарий использования
 
----
+| Сценарий | Изменение GPA | Сохранение навыков |
+|---|---:|---:|
+| **Отладка и поиск ошибок** | **+0,249** | **78,1** |
+| Генерация идей | +0,200 | 75,5 |
+| Подготовка черновиков | +0,200 | 75,2 |
+| Конспектирование | +0,197 | 75,2 |
+| **Получение готового ответа** | **+0,133** | **73,7** |
 
-## Structure
+### Навык составления запросов
 
-```
+| Уровень | Изменение GPA | Сохранение навыков |
+|---|---:|---:|
+| Начальный | +0,185 | 71,1 |
+| Средний | +0,187 | 75,8 |
+| **Продвинутый** | **+0,248** | **82,1** |
+
+## Интерпретация
+
+- Умеренное использование ИИ связано с лучшим балансом успеваемости и риска выгорания.
+- Отладка и разбор проблемы связаны с более сильными результатами, чем получение готового ответа.
+- Традиционная учёба имеет более сильную корреляцию с изменением GPA (`r = 0,37`), чем любой отдельный признак использования ИИ.
+- Практическая гипотеза для проверки: обучать студентов работе с запросами и ограничивать механическое получение ответов, после чего оценить эффект экспериментально.
+
+## Ограничения
+
+- Анализ наблюдательный: различия между группами нельзя называть причинным влиянием ИИ.
+- Статистическая значимость на 50 000 строк не гарантирует большого практического эффекта.
+- Одновременно проверяется несколько гипотез; без поправки на множественные сравнения возрастает риск ложноположительных выводов.
+- Часть признаков основана на самооценке студентов и может содержать систематическую ошибку.
+- Происхождение и способ формирования набора нужно дополнительно проверить перед использованием результатов для образовательной политики.
+
+## Структура и запуск
+
+```text
 ai-education-analyst/
-├── analysis.md          # Full EDA with code, tables, and charts
-└── README.md
-```
-
-The analysis is written in Markdown with all Python code blocks included — run cells top to bottom in a Jupyter notebook or extract into a `.py` script.
-
----
-
-## Key Results
-
-### GPA Change vs AI Usage Hours
-
-| Hours/week | Avg GPA Δ | Burnout High % |
-|------------|-----------|----------------|
-| 0–2 h | +0.19 | 8.9% |
-| 2–5 h | +0.20 | 11.9% |
-| **5–10 h** | **+0.23** | **19.0%** |
-| 10–20 h | +0.22 | 40.0% |
-| 20+ h | +0.16 | **74.3%** |
-
-### Use Case Matters More Than Hours
-
-| Use Case | GPA Δ | Skill Retention |
-|----------|-------|-----------------|
-| **Debugging / Troubleshooting** | **+0.249** | **78.1** |
-| Ideation | +0.200 | 75.5 |
-| Copywriting / Drafting | +0.200 | 75.2 |
-| Summarizing Reading | +0.197 | 75.2 |
-| **Direct Answer Generation** | **+0.133** | **73.7** |
-
-### Prompt Engineering Skill Gap
-
-| Skill Level | GPA Δ | Skill Retention |
-|-------------|-------|-----------------|
-| Beginner | +0.185 | 71.1 |
-| Intermediate | +0.187 | 75.8 |
-| **Advanced** | **+0.248** | **82.1** |
-
-> Advanced users outperform Beginners by **+34% in GPA growth** and **+15% in skill retention**.
-
----
-
-## Stack
-
-```
-pandas · numpy · scipy · matplotlib · seaborn
+├── analysis.md          # полный анализ: код, таблицы и интерпретация
+└── README.md            # краткое описание проекта
 ```
 
 ```bash
 pip install pandas numpy scipy matplotlib seaborn
 ```
 
----
+Скачайте `ai_student_impact_dataset.csv` со страницы источника, положите его в корень проекта и последовательно выполните блоки кода из [`analysis.md`](analysis.md).
 
-## Setup
+## Автор
 
-1. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/laveshjadon/ai-impact-on-students) and place `ai_student_impact_dataset.csv` in the project root.
-2. Open `analysis.md` and copy code blocks into a Jupyter notebook.
-3. Run cells sequentially — the dataset has zero missing values, no preprocessing surprises.
+**Ярослав Зинченко** — аналитик данных. Проект выполнен как портфельная работа по разведочному анализу и статистике.
 
----
-
-## Author
-
-**Yaroslav Zinchenko** — aspiring data analyst, Python/pandas learner  
-Building a portfolio of EDA projects on real-world datasets.
-
----
-
-*Data source: [Kaggle — Impact of AI on Students](https://www.kaggle.com/datasets/laveshjadon/ai-impact-on-students) by laveshjadon*
+Источник данных: [Kaggle — Impact of AI on Students](https://www.kaggle.com/datasets/laveshjadon/ai-impact-on-students), автор laveshjadon.
